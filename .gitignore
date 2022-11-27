@@ -1,0 +1,8 @@
+config.py
+*.pyc
+__pycache__/
+*.egg*
+build/
+dist/
+.venv/
+.vscode/
