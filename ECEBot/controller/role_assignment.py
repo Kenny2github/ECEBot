@@ -105,12 +105,12 @@ class CourseSelect(discord.ui.Select[LevelView]):
         assert isinstance(ctx.user, discord.Member)
         name = self.values[0]
         role = discord.utils.get(ctx.guild.roles, name=name)
+        await ctx.response.edit_message(view=self.view)
         if role is None:
-            await ctx.response.send_message(embed=error_embed(
+            await ctx.followup.send(embed=error_embed(
                 f'Could not find {name!r} role to toggle, '
                 'please contact the admins.'))
             return
-        await ctx.response.edit_message(view=self.view)
         if role in ctx.user.roles:
             await ctx.user.remove_roles(role, reason='Requested by user')
             logger.info(REMOVED_MESSAGE, name, role.id, ctx.user, ctx.user.id)
