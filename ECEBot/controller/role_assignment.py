@@ -67,12 +67,14 @@ class AreaView(discord.ui.View):
     async def area(self, ctx: discord.Interaction,
                    select: discord.ui.Select) -> None:
         assert ctx.guild is not None
+        assert ctx.message is not None
         assert isinstance(ctx.user, discord.Member)
         view = LevelView(area=int(select.values[0]))
-        await ctx.response.send_message(
+        await ctx.response.edit_message(view=self)
+        await ctx.followup.send(
             content=f'Choose Area {select.values[0]} courses from the below dropdowns.',
             view=view,
-            ephemeral=True
+            ephemeral=True,
         )
 
 class LevelView(discord.ui.View):
@@ -88,7 +90,7 @@ class LevelView(discord.ui.View):
                 self.add_item(CourseSelect(
                     level=level, courses=courses))
 
-class CourseSelect(discord.ui.Select):
+class CourseSelect(discord.ui.Select[LevelView]):
 
     def __init__(self, *, level: Level, courses: list[str]) -> None:
         super().__init__(
@@ -99,6 +101,7 @@ class CourseSelect(discord.ui.Select):
 
     async def callback(self, ctx: discord.Interaction) -> None:
         assert ctx.guild is not None
+        assert ctx.message is not None
         assert isinstance(ctx.user, discord.Member)
         name = self.values[0]
         role = discord.utils.get(ctx.guild.roles, name=name)
@@ -107,7 +110,7 @@ class CourseSelect(discord.ui.Select):
                 f'Could not find {name!r} role to toggle, '
                 'please contact the admins.'))
             return
-        await ctx.response.defer(ephemeral=True, thinking=True)
+        await ctx.response.edit_message(view=self.view)
         if role in ctx.user.roles:
             await ctx.user.remove_roles(role, reason='Requested by user')
             logger.info(REMOVED_MESSAGE, name, role.id, ctx.user, ctx.user.id)
