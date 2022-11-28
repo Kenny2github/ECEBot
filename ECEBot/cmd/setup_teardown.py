@@ -67,17 +67,26 @@ class Setup(app_commands.Group):
         for area, levels in COURSES.items():
             courses = [course for level in levels.values() for course in level]
             name = f'Area {area}'
-            logger.debug('Creating %r category', name)
-            cat = await ctx.guild.create_category(name, overwrites={
-                ctx.guild.default_role: default_perms,
-                area_roles[area]: role_perms,
-                ctx.guild.me: my_perms,
-            })
+            cat = discord.utils.get(ctx.guild.categories, name=name)
+            if cat is None:
+                logger.debug('Creating %r category', name)
+                cat = await ctx.guild.create_category(name, overwrites={
+                    ctx.guild.default_role: default_perms,
+                    area_roles[area]: role_perms,
+                    ctx.guild.me: my_perms,
+                })
+            else:
+                logger.debug('Found %r category', name)
             for course in courses:
                 if course in created_courses:
                     logger.debug('Already created a channel for %s', course)
                     continue
                 name = course.lower()
+                channel = discord.utils.get(cat.channels, name=name)
+                if channel is not None:
+                    logger.debug('Found channel for %s', course)
+                    created_courses.add(course)
+                    continue
                 logger.debug('Creating #%s', name)
                 await cat.create_text_channel(name, overwrites={
                     ctx.guild.default_role: default_perms,
