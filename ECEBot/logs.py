@@ -4,6 +4,8 @@ import os
 import time
 import logging
 from logging.handlers import QueueHandler
+from contextlib import contextmanager
+from typing import Iterator
 import asyncio
 
 # 1st-party
@@ -34,3 +36,25 @@ async def consume_logs(queue: asyncio.Queue[logging.LogRecord]):
     while 1: # the nice thing about tasks is that they can be cancelled
         record = await queue.get()
         handler.emit(record)
+
+class ListHandler(logging.Handler):
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.logs: list[str] = []
+
+    def emit(self, record: logging.LogRecord) -> None:
+        try:
+            msg = self.format(record)
+            self.logs.append(msg)
+        except Exception:
+            self.handleError(record)
+
+@contextmanager
+def capture_logs(logger: logging.Logger) -> Iterator[list[str]]:
+    handler = ListHandler()
+    logger.addHandler(handler)
+    try:
+        yield handler.logs
+    finally:
+        logger.removeHandler(handler)
