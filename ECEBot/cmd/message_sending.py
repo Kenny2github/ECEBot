@@ -40,6 +40,7 @@ class MessageSending(commands.Cog):
 
     @app_commands.command()
     @app_commands.guild_only()
+    @app_commands.default_permissions()
     async def send_message(self, ctx: discord.Interaction,
                            channel: discord.TextChannel) -> None:
         """Send a message with the area selector in a channel."""

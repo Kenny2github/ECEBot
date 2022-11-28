@@ -20,6 +20,7 @@ class Setup(app_commands.Group):
             name='setup',
             description='Perform server setup tasks',
             guild_only=True,
+            default_permissions=discord.Permissions.none(),
         )
 
     @app_commands.command()
@@ -127,6 +128,7 @@ class Teardown(app_commands.Group):
             name='teardown',
             description='Tear down items, to set them up again',
             guild_only=True,
+            default_permissions=discord.Permissions.none(),
         )
 
     @app_commands.command()
