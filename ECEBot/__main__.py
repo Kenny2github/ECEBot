@@ -10,6 +10,8 @@ async def main():
         await run()
     except KeyboardInterrupt:
         pass
+    except asyncio.CancelledError:
+        return
     finally:
         await done()
 

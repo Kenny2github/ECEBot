@@ -1,4 +1,5 @@
 config.py
+messages.json
 *.pyc
 __pycache__/
 *.egg*

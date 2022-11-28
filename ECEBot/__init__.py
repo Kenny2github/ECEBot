@@ -13,9 +13,11 @@ from config import TOKEN
 from .logs import activate as activate_logging
 from .status import SetStatus
 from .watcher import stop_on_change
+from .controller.role_assignment import load_guilds
 
 MODULES: dict[str, tuple[str, str]] = {
     'Miscellaneous Commands': ('cmd.misc', 'misc'),
+    'Message Sending': ('cmd.message_sending', 'msg'),
 }
 
 logger = getLogger(__name__)
@@ -45,6 +47,7 @@ async def run():
     globs['wakeup'] = asyncio.create_task(stop_on_change(bot, 'ECEBot'))
     await bot.login(TOKEN)
     globs['status'].start()
+    asyncio.create_task(load_guilds(bot))
     await bot.connect()
 
 async def cleanup_tasks():
