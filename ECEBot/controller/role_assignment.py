@@ -68,22 +68,9 @@ class AreaView(discord.ui.View):
                    select: discord.ui.Select) -> None:
         assert ctx.guild is not None
         assert isinstance(ctx.user, discord.Member)
-        name = f'Area {select.values[0]}'
-        role = discord.utils.get(ctx.guild.roles, name=name)
-        if role is None:
-            await ctx.response.send_message(embed=error_embed(
-                f'Could not find {name!r} role to give you, '
-                'please contact the admins.'))
-            return
-        await ctx.response.defer(ephemeral=True)
-        if role not in ctx.user.roles:
-            await ctx.user.add_roles(role, reason='Requested by user')
-            logger.info(GIVEN_MESSAGE, name, role.id, ctx.user, ctx.user.id)
-        else:
-            logger.debug(HAD_MESSAGE, name, role.id, ctx.user, ctx.user.id)
         view = LevelView(area=int(select.values[0]))
-        await ctx.followup.send(
-            content=f'Choose {name} courses from the below dropdowns.',
+        await ctx.response.send_message(
+            content=f'Choose Area {select.values[0]} courses from the below dropdowns.',
             view=view,
             ephemeral=True
         )
@@ -100,27 +87,6 @@ class LevelView(discord.ui.View):
             if courses:
                 self.add_item(CourseSelect(
                     level=level, courses=courses))
-
-    @discord.ui.button(label='Remove this area role',
-                       style=discord.ButtonStyle.danger, row=4)
-    async def remove(self, ctx: discord.Interaction,
-                     button: discord.ui.Button) -> None:
-        assert ctx.guild is not None
-        assert isinstance(ctx.user, discord.Member)
-        await ctx.response.defer(ephemeral=True)
-        name = f'Area {self.area}'
-        role = discord.utils.get(ctx.guild.roles, name=name)
-        if role is None:
-            await ctx.followup.send(embed=error_embed(
-                f'Could not find {name!r} role to remove, '
-                'please contact the admins.'))
-            return
-        if role in ctx.user.roles:
-            await ctx.user.remove_roles(role, reason='Requested by user')
-            logger.info(REMOVED_MESSAGE, name, role.id, ctx.user, ctx.user.id)
-        else:
-            logger.debug(NOT_HAD_MESSAGE, name, role.id, ctx.user, ctx.user.id)
-        await ctx.followup.send('Removed your role.', ephemeral=True)
 
 class CourseSelect(discord.ui.Select):
 
