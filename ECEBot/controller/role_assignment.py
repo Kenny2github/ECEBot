@@ -135,8 +135,6 @@ class CourseSelect(discord.ui.Select):
         assert ctx.guild is not None
         assert isinstance(ctx.user, discord.Member)
         name = self.values[0]
-        if name.endswith(('H1', 'Y1')):
-            name = name[:-2]
         role = discord.utils.get(ctx.guild.roles, name=name)
         if role is None:
             await ctx.response.send_message(embed=error_embed(
