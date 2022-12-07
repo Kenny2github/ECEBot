@@ -45,6 +45,8 @@ class ECETree(app_commands.CommandTree):
         logger.error('', exc_info=exc)
 
     async def interaction_check(self, ctx: discord.Interaction) -> bool:
+        if ctx.type == discord.InteractionType.autocomplete:
+            return True # don't log autocompletes, they spam
         logger.info('User %s\t(%18d) in channel %s\t(%18d) running /%s',
                     ctx.user, ctx.user.id, ctx.channel,
                     ctx.channel.id if ctx.channel else '(none)',
