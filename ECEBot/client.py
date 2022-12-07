@@ -1,4 +1,5 @@
 # stdlib
+import time
 from functools import partial
 from logging import getLogger
 
@@ -65,6 +66,20 @@ class ECEBot(commands.Bot):
             self.tree.copy_global_to(guild=debug_guild)
             await self.tree.sync(guild=debug_guild)
             logger.info('Synced commands')
+        now = time.time()
+        now_str = time.strftime('%Y-%m-%d %H:%M', time.gmtime(now))
+        freshness_str = time.strftime(
+            '%Y-%m-%d %H:%M', time.gmtime(config.COMMAND_FRESHNESS))
+        if config.COMMAND_FRESHNESS > now:
+            logger.info(
+                'Command freshness (%s) is newer than current time '
+                '(%s), syncing global commands',
+                freshness_str, now_str
+            )
+            await self.tree.sync()
+        else:
+            logger.debug('Commands are up-to-date (%s < %s)',
+                         freshness_str, now_str)
 
     async def on_ready(self) -> None:
         logger.info('Ready!')
