@@ -123,20 +123,35 @@ class CourseSelect(discord.ui.Select[LevelView]):
                 content=f'Successfully gave you the {name!r} role.', ephemeral=True)
 
 async def load_guilds(bot: commands.Bot) -> None:
+    data = {}
     try:
         with open(MESSAGE_FILENAME, 'r', encoding='utf8') as f:
             data: dict[str, int] = json.load(f)
     except FileNotFoundError:
-        logger.info('No guild data to load')
+        logger.warning('No guild data to load')
         return
-    for channel_id, message_id in data.items():
-        channel_id = int(channel_id)
-        channel = cast(discord.TextChannel, bot.get_channel(channel_id)
-                       or await bot.fetch_channel(channel_id))
-        message = channel.get_partial_message(message_id)
-        logger.info('Taking ownership of #%s (%s) %s',
-                    channel.name, channel.id, message.id)
-        try:
-            await message.edit(view=AreaView())
-        except discord.NotFound:
-            logger.error('Message ID %s not found', message.id)
+    else:
+        # to prevent modifying a dictionary we're iterating over
+        data_items = list(data.items())
+        for channel_id, message_id in data_items:
+            channel_id = int(channel_id)
+            try:
+                channel = cast(discord.TextChannel, bot.get_channel(channel_id)
+                            or await bot.fetch_channel(channel_id))
+            except discord.NotFound:
+                logger.error('Channel ID %s not found, unsetting', channel_id)
+                del data[str(channel_id)] # clear this channel
+                continue
+            message = channel.get_partial_message(message_id)
+            logger.info('Taking ownership of #%s (%s) %s',
+                        channel.name, channel.id, message.id)
+            try:
+                await message.edit(view=AreaView())
+            except discord.NotFound:
+                logger.error('Message ID %s not found, unsetting', message.id)
+                del data[str(channel_id)] # clear this message
+                continue
+    finally:
+        with open(MESSAGE_FILENAME, 'w', encoding='utf8') as f:
+            json.dump(data, f)
+        logger.debug('Written updated data')
