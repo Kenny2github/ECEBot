@@ -63,7 +63,7 @@ class AreaView(discord.ui.View):
             7: 'Area 7: Science/Math Electives',
         }[i], value=f'{i}')
         for i in range(1, 8)
-    ])
+    ], placeholder='Choose an area')
     async def area(self, ctx: discord.Interaction,
                    select: discord.ui.Select) -> None:
         assert ctx.guild is not None
