@@ -18,6 +18,7 @@ from .controller.role_assignment import load_guilds
 MODULES: dict[str, tuple[str, str]] = {
     'Miscellaneous Commands': ('cmd.misc', 'misc'),
     'Message Sending': ('cmd.message_sending', 'msg'),
+    'Self Roles': ('cmd.self_role', 'self_role'),
     'Setup & Teardown': ('cmd.setup_teardown', 'setup')
 }
 
