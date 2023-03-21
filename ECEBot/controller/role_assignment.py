@@ -29,25 +29,23 @@ NOT_HAD_MESSAGE = '%r (%s) role not present on %s (%s)'
 
 AREAS: dict[int, str] = {}
 COURSES: dict[int, defaultdict[Level, list[str]]] = {}
-with open(COURSES_FILENAME, 'rb') as f:
-    courses = tomllib.load(f)
 
-course = code = key = value = ''
-area = level = 0
-for key, value in courses.items():
-    area = int(key[len('area-'):])
-    AREAS[area] = value['name']
-    COURSES[area] = defaultdict(list)
-    for course in value['courses']:
-        code = re.search(r'[2345]\d\d', course)
-        if code is None:
-            raise ValueError(f'Invalid course code {course!r}')
-        level = cast(Level, int(code.group(0)[0]) * 100)
-        COURSES[area][level].append(course)
-        logger.info('Area %s: loaded %s-level %s',
-                    area, level, course)
+def load_course_info():
+    with open(COURSES_FILENAME, 'rb') as f:
+        courses = tomllib.load(f)
 
-del courses, course, area, code, level, key, value
+    for key, value in courses.items():
+        area = int(key[len('area-'):])
+        AREAS[area] = value['name']
+        COURSES[area] = defaultdict(list)
+        for course in value['courses']:
+            code = re.search(r'[2345]\d\d', course)
+            if code is None:
+                raise ValueError(f'Invalid course code {course!r}')
+            level = cast(Level, int(code.group(0)[0]) * 100)
+            COURSES[area][level].append(course)
+
+load_course_info()
 
 # end course info
 
@@ -132,7 +130,7 @@ async def load_guilds(bot: commands.Bot) -> None:
             channel_id = int(channel_id)
             try:
                 channel = cast(discord.TextChannel, bot.get_channel(channel_id)
-                            or await bot.fetch_channel(channel_id))
+                               or await bot.fetch_channel(channel_id))
             except discord.NotFound:
                 logger.error('Channel ID %s not found, unsetting', channel_id)
                 del data[str(channel_id)] # clear this channel
