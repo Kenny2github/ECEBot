@@ -27,15 +27,18 @@ NOT_HAD_MESSAGE = '%r (%s) role not present on %s (%s)'
 
 # load course info
 
+AREAS: dict[int, str] = {}
 COURSES: dict[int, defaultdict[Level, list[str]]] = {}
 with open(COURSES_FILENAME, 'rb') as f:
     courses = tomllib.load(f)
 
-course = code = ''
+course = code = key = value = ''
 area = level = 0
-for area in range(1, 8):
+for key, value in courses.items():
+    area = int(key[len('area-'):])
+    AREAS[area] = value['name']
     COURSES[area] = defaultdict(list)
-    for course in courses[f'area-{area}']['courses']:
+    for course in value['courses']:
         code = re.search(r'[2345]\d\d', course)
         if code is None:
             raise ValueError(f'Invalid course code {course!r}')
@@ -44,7 +47,7 @@ for area in range(1, 8):
         logger.info('Area %s: loaded %s-level %s',
                     area, level, course)
 
-del courses, course, area, code, level
+del courses, course, area, code, level, key, value
 
 # end course info
 
@@ -53,16 +56,8 @@ class AreaView(discord.ui.View):
         super().__init__(timeout=None)
 
     @discord.ui.select(options=[
-        discord.SelectOption(label={
-            1: 'Area 1: Photonics & Semiconductor Physics',
-            2: 'Area 2: Electromagnetics & Energy Systems',
-            3: 'Area 3: Analog & Digital Electronics',
-            4: 'Area 4: Control, Communications & Signal Processing',
-            5: 'Area 5: Computer Hardware & Computer Networks',
-            6: 'Area 6: Software',
-            7: 'Area 7: Science/Math Electives',
-        }[i], value=f'{i}')
-        for i in range(1, 8)
+        discord.SelectOption(label=area, value=f'{i}')
+        for i, area in AREAS.items()
     ], placeholder='Choose an area')
     async def area(self, ctx: discord.Interaction,
                    select: discord.ui.Select) -> None:

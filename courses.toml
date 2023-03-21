@@ -1,4 +1,5 @@
 [area-1]
+name = 'Area 1: Photonics & Semiconductor Physics'
 courses = [
 	'ECE318H1',
 	'ECE330H1',
@@ -9,6 +10,7 @@ courses = [
 ]
 
 [area-2]
+name = 'Area 2: Electromagnetics & Energy Systems'
 courses = [
 	'BME595H1',
 	'ECE313H1',
@@ -24,6 +26,7 @@ courses = [
 ]
 
 [area-3]
+name = 'Area 3: Analog & Digital Electronics'
 courses = [
 	'ECE331H1',
 	'ECE334H1',
@@ -39,6 +42,7 @@ courses = [
 ]
 
 [area-4]
+name = 'Area 4: Control, Communications & Signal Processing'
 courses = [
 	'BME331H1',
 	'BME445H1',
@@ -65,6 +69,7 @@ courses = [
 ]
 
 [area-5]
+name = 'Area 5: Computer Hardware & Computer Networks'
 courses = [
 	'ECE302H1',
 	'ECE342H1',
@@ -81,6 +86,7 @@ courses = [
 ]
 
 [area-6]
+name = 'Area 6: Software'
 courses = [
 	'APS360H1',
 	'CSC317H1',
@@ -103,6 +109,7 @@ courses = [
 ]
 
 [area-7]
+name = 'Area 7: Science/Math Electives'
 courses = [
 	'BME331H1',
 	'BME440H1',
