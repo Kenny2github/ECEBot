@@ -1,3 +1,5 @@
+### ECE AREAS ###
+
 [area-1]
 name = 'Area 1: Photonics & Semiconductor Physics'
 courses = [
@@ -126,4 +128,612 @@ courses = [
 	'ECE537H1',
 	'ESC384H1',
 	'PHY365H1',
+]
+
+### ENGINEERING MINORS ###
+
+[AEMINENV]
+name = 'Environmental Engineering Minor (U of T Sustainability Scholar)'
+courses = [
+	'CME259H1',
+	'ESC203H1',
+	'ENV221H1',
+	'GGR223H1',
+	'CIV220H1',
+	'CIV440H1',
+	'CHE460H1',
+	'CHE467H1',
+	'CHM210H1',
+	'CIV300H1',
+	'CIV375H1',
+	'ENV234H1',
+	'ENV350H1',
+	'FOR308H1',
+	'CHE565H1',
+	'CIV531H1',
+	'CIV536H1',
+	'CIV541H1',
+	'CIV550H1',
+	'CIV575H1',
+	'CIV578H1',
+	'CME549H1',
+	'FOR421H1',
+	'MIE515H1',
+	'MIN511H1',
+	'MSE415H1',
+	'APS330H1',
+	'CHE230H1',
+	'CHM310H1',
+	'CIV250H1',
+	'ENV222H1',
+	'GGR314H1',
+	'MIE315H1',
+	'APS530H1',
+	'CHE471H1',
+	'CHE475H1',
+	'CHE564H1',
+	'CHM410H1',
+	'CHM415H1',
+	'CIV576H1',
+	'CIV577H1',
+	'CME500H1',
+	'FOR424H1',
+	'MIN330H1',
+	'APS420H1',
+]
+
+[AEMINADVM]
+name = 'Minor in Advanced Manufacturing'
+courses = [
+	'CHE324H1',
+	'MIE221H1',
+	'MIE304H1',
+	'MIE364H1',
+	'MSE351H1',
+	'MIE519H1',
+	'TEP343H1',
+	'TEP442H1',
+	'ECE488H1',
+	'JRE420H1',
+	'CHE441H1',
+	'MIE243H1',
+	'MIE342H1',
+	'MIE354H1',
+	'AER525H1',
+	'CHE462H1',
+	'CHE562H1',
+	'CHE475H1',
+	'CHE561H1',
+	'ECE470H1',
+	'FOR424H1',
+	'MIE368H1',
+	'MIE410H1',
+	'MIE422H1',
+	'MIE440H1',
+	'MIE441H1',
+	'MIE443H1',
+	'MIE469H1',
+	'MIE540H1',
+	'MIE562H1',
+	'MIE566H1',
+	'MSE419H1',
+	'MSE431H1',
+	'MSE438H1',
+	'MSE443H1',
+	'MSE455H1',
+	'MSE461H1',
+]
+
+[AEMINAIEN]
+name = 'Minor in Artificial Intelligence Engineering'
+courses = [
+	'APS360H1',
+	'CSC263H1',
+	'ECE345H1',
+	'ECE358H1',
+	'MIE245H1',
+	'CSC384H1',
+	'MIE369H1',
+	'ROB311H1',
+	'CSC311H1',
+	'ECE421H1',
+	'MIE424H1',
+	'CHE408H1',
+	'CHE507H1',
+	'CME538H1',
+	'CSC401H1',
+	'CSC420H1',
+	'CSC413H1',
+	'CSC485H1',
+	'CSC486H1',
+	'ECE368H1',
+	'HPS345H1',
+	'HPS346H1',
+	'MIE368H1',
+	'MIE451H1',
+	'MIE457H1',
+	'MIE562H1',
+	'MIE566H1',
+	'MIE567H1',
+	'MIE524H1',
+	'MSE403H1',
+	'MSE465H1',
+	'AER336H1',
+	'BME595H1',
+	'CHE322H1',
+	'CSC343H1',
+	'CSC412H1',
+	'ECE344H1',
+	'ECE353H1',
+	'ECE356H1',
+	'ECE367H1',
+	'ECE411H1',
+	'ECE419H1',
+	'ECE431H1',
+	'ECE444H1',
+	'ECE454H1',
+	'ECE470H1',
+	'ECE516H1',
+	'ECE532H1',
+	'ECE557H1',
+	'ECE568H1',
+	'MAT336H1',
+	'MAT389H1',
+	'STA302H1',
+	'STA410H1',
+]
+
+[AEMINBIO]
+name = 'Minor in Bioengineering'
+courses = [
+	'CHE353H1',
+	'BME412H1',
+	'BME455H1',
+	'BME331H1',
+	'CHE354H1',
+	'BME440H1',
+	'CHE450H1',
+	'BME595H1',
+	'CHE475H1',
+	'ECE448H1',
+	'MSE343H1',
+	'MSE440H1',
+	'MIE439H1',
+	'MIE458H1',
+	'MIE520H1',
+	'BME330H1',
+	'BME445H1',
+	'BME530H1',
+	'ECE446H1',
+	'ECE441H1',
+	'MGY441H1',
+	'CHE471H1',
+	'BCB420H1',
+	'CHE462H1',
+	'CHE564H1',
+	'CIV342H1',
+	'CIV541H1',
+	'MGY377H1',
+	'CHE416H1',
+	'CHM456H1',
+	'ECE331H1',
+	'ECE335H1',
+	'ECE431H1',
+	'ECE516H1',
+	'FOR308H1',
+	'FOR421H1',
+	'FOR424H1',
+	'FOR425H1',
+	'HMB201H1',
+	'HMB265H1',
+	'HPS318H1',
+	'HPS319H1',
+	'IMM250H1',
+	'MIE242H1',
+	'MIE343H1',
+	'MIE523H1',
+	'MIE561H1',
+	'PCL201H1',
+	'PCL302H1',
+	'PHL281H1',
+	'PSL300H1',
+]
+
+[AEMINBUS]
+name = 'Minor in Engineering Business'
+courses = [
+	'JRE300H1',
+	'JRE410H1',
+	'JRE420H1',
+	'APS500H1',
+	'APS502H1',
+	'APS521H1',
+	'ECE488H1',
+	'ECO101H1',
+	'FOR308H1',
+	'MIE354H1',
+	'PHL295H1',
+	'TEP234H1',
+	'TEP343H1',
+	'TEP444H1',
+	'TEP445H1',
+	'APS510H1',
+	'APS420H1',
+	'APS511H1',
+	'ECO102H1',
+	'GGR251H1',
+	'GGR252H1',
+	'HPS283H1',
+	'MIE540H1',
+	'TEP432H1',
+	'TEP442H1',
+	'TEP447H1',
+	'TEP448H1',
+]
+
+[AEMINMUSP]
+name = 'Minor in Engineering Music Performance'
+courses = [
+	'PMU299Y1',
+	'TMU130H1',
+	'ECE446H1',
+	'TMU111H1',
+	'TMU313H1',
+	'TMU319H1',
+	'TMU330H1',
+	'TMU406H1',
+	'HMU111H1',
+	'MUS110H1',
+	'MUS111H1',
+	'MUS200H1',
+	'MUS204H1',
+	'MUS209H1',
+	'MUS211H1',
+	'MUS212H1',
+	'MUS240H1',
+	'MUS302H1',
+	'MUS306H1',
+	'MUS308H1',
+	'MUS335H1',
+	'TMU131H1',
+]
+
+[AEMINGLOB]
+name = 'Minor in Global Leadership'
+courses = [
+	'GLB201H5',
+	'GLBC01H3',
+	'GLB401Y1',
+	'APS299Y0',
+	'APS510H1',
+	'APS420H1',
+	'APS530H1',
+	'ANT204H1',
+	'ENV333H1',
+	'GGR112H1',
+	'JGU216H1',
+	'POL201H1',
+	'POL208H1',
+	'CDN268H1',
+]
+
+[AEMINNANO]
+name = 'Minor in Nanoengineering'
+courses = [
+	'MSE219H1',
+	'ECE335H1',
+	'BME346H1',
+	'ECE330H1',
+	'ECE350H1',
+	'PHY358H1',
+	'CHE562H1',
+	'CHM338H1',
+	'ECE427H1',
+	'MSE430H1',
+	'MSE438H1',
+	'MSE443H1',
+	'MSE459H1',
+	'PHY427H1',
+	'PHY456H1',
+	'PHY485H1',
+	'PHY487H1',
+	'BME440H1',
+	'CHE475H1',
+	'CHM328H1',
+	'FOR424H1',
+	'MSE462H1',
+	'MSE458H1',
+	'MIE506H1',
+	'MIE517H1',
+	'PHY450H1',
+	'PHY452H1',
+]
+
+[AEMINRAM]
+name = 'Minor in Robotics and Mechatronics'
+courses = [
+	'CHE322H1',
+	'ECE311H1',
+	'ECE356H1',
+	'MIE404H1',
+	'AER372H1',
+	'BME344H1',
+	'AER525H1',
+	'ECE470H1',
+	'MIE422H1',
+	'MIE443H1',
+	'MIE444H1',
+	'AER301H1',
+	'APS360H1',
+	'BME350H1',
+	'CSC263H1',
+	'ECE316H1',
+	'ECE345H1',
+	'MIE243H1',
+	'MIE301H1',
+	'ROB310H1',
+	'ECE353H1',
+	'ECE358H1',
+	'ECE363H1',
+	'BME331H1',
+	'MIE346H1',
+	'AER407H1',
+	'CSC384H1',
+	'CSC311H1',
+	'ECE410H1',
+	'ECE431H1',
+	'BME445H1',
+	'ECE557H1',
+	'MIE442H1',
+	'MIE444H1',
+	'ROB521H1',
+	'CHE507H1',
+	'CSC428H1',
+	'ECE411H1',
+	'ECE516H1',
+	'ECE421H1',
+	'ECE532H1',
+	'MAT363H1',
+	'MIE438H1',
+	'MIE505H1',
+	'MIE506H1',
+]
+
+[AEMINENR]
+name = 'Sustainable Energy Minor (U of T Sustainability Scholar)'
+courses = [
+	'CIV300H1',
+	'APS305H1',
+	'ENV350H1',
+	'CME259H1',
+	'CHE260H1',
+	'CHE323H1',
+	'CHE467H1',
+	'CIV375H1',
+	'ECE313H1',
+	'ECE314H1',
+	'ECE349H1',
+	'GGR347H1',
+	'AER507H1',
+	'CHE451H1',
+	'CHE566H1',
+	'CIV531H1',
+	'CIV501H1',
+	'ECE520H1',
+	'MIE407H1',
+	'MIE507H1',
+	'MIE515H1',
+	'MIE516H1',
+	'APS510H1',
+	'CHE460H1',
+	'CIV440H1',
+	'FOR310H1',
+	'GGR348H1',
+	'MIE311H1',
+	'MIE313H1',
+	'MSE355H1',
+	'JPE395H1',
+	'APS530H1',
+	'CHE469H1',
+	'CHE568H1',
+	'CIV576H1',
+	'CIV577H1',
+	'ECE463H1',
+	'ECE526H1',
+	'FOR425H1',
+	'MIE408H1',
+	'MIE517H1',
+	'MIE550H1',
+	'MSE458H1',
+]
+
+### ENGINEERING CERTIFICATES ###
+
+[AECERAIEN]
+name = 'Certificate in Artificial Intelligence Engineering'
+courses = [
+	'APS360H1',
+	'ECE345H1',
+	'ECE358H1',
+	'CSC263H1',
+	'MIE245H1',
+	'CSC311H1',
+	'CSC384H1',
+	'ECE421H1',
+	'MIE369H1',
+	'MIE424H1',
+	'ROB311H1',
+	'ROB313H1',
+]
+
+[AECERCOM]
+name = 'Certificate in Communication'
+courses = [
+	'TEP281H1',
+	'TEP320H1',
+	'TEP321H1',
+	'TEP322H1',
+	'TEP323H1',
+	'TEP324H1',
+	'TEP325H1',
+	'TEP326H1',
+	'TEP445H1',
+	'TEP449H1',
+	'WRR304H1',
+	'WRR305H1',
+	'WRR310H1',
+]
+
+[AECERBUS]
+name = 'Certificate in Engineering Business'
+courses = [
+	'JRE300H1',
+	'JRE410H1',
+	'JRE420H1',
+	'ECE488H1',
+]
+
+[AECERLEAD]
+name = 'Certificate in Engineering Leadership'
+courses = [
+	'TEP322H1',
+	'TEP343H1',
+	'TEP442H1',
+	'TEP444H1',
+	'TEP445H1',
+	'TEP447H1',
+	'TEP448H1',
+	'TEP449H1',
+]
+
+[AECERENTR]
+name = 'Certificate in Entrepreneurship, Innovation and Small Business'
+courses = [
+	'TEP234H1',
+	'TEP432H1',
+]
+
+[AECERFORE]
+name = 'Certificate in Forensic Engineering'
+courses = [
+	'MSE431H1',
+	'APS440H1',
+	'CHE441H1',
+	'CHE467H1',
+	'CHE561H1',
+	'CIV440H1',
+	'CIV510H1',
+	'MIE304H1',
+	'MIE320H1',
+	'MIE364H1',
+	'MIE442H1',
+	'MIE469H1',
+	'MSE401H1',
+	'MSE415H1',
+	'MSE419H1',
+]
+
+[AECERGLOB]
+name = 'Certificate in Global Engineering (U of T Global Scholar)'
+courses = [
+	'APS299Y0',
+	'APS510H1',
+	'APS530H1',
+	'APS420H1',
+	'APS330H1',
+	'ANT204H1',
+	'ENV333H1',
+	'GGR112H1',
+	'JGU216H1',
+	'POL201H1',
+	'POL208H1',
+	'CDN268H1',
+]
+
+[AECERMINR]
+name = 'Certificate in Mineral Resources'
+courses = [
+	'MIN120H1',
+	'MIN250H1',
+	'MIN351H1',
+	'MIN301H1',
+	'MIN350H1',
+	'MIN250H1',
+	'MIN330H1',
+	'MIN301H1',
+	'MIN330H1',
+]
+
+[AECERMUST]
+name = 'Certificate in Music Technology'
+courses = [
+	'TMU111H1',
+	'ECE446H1',
+	'TMU130H1',
+	'HMU111H1',
+	'MUS110H1',
+	'MUS111H1',
+	'MUS200H1',
+	'MUS204H1',
+	'MUS209H1',
+	'MUS211H1',
+	'MUS212H1',
+	'MUS240H1',
+	'MUS302H1',
+	'MUS306H1',
+	'MUS308H1',
+	'MUS335H1',
+	'TMU131H1',
+	'TMU313H1',
+	'TMU319H1',
+	'TMU330H1',
+	'TMU406H1',
+]
+
+[AECERNUC]
+name = 'Certificate in Nuclear Engineering'
+courses = [
+	'CHE566H1',
+	'AER507H1',
+	'CHE568H1',
+	'MIE407H1',
+	'MIE408H1',
+]
+
+[AECERPHEN]
+name = 'Certificate in Public Health and Engineering'
+courses = [
+	'APS470H1',
+	'CIV536H1',
+	'CIV550H1',
+	'HST209H1',
+	'MIE368H1',
+	'CHE416H1',
+	'CHE460H1',
+	'CHE561H1',
+	'CIV577H1',
+	'GGR433H1',
+	'GGR434H1',
+	'HST211H1',
+	'HST330H1',
+	'MIE542H1',
+	'MIE561H1',
+]
+
+[AECERPPGE]
+name = 'Certificate in Public Policy and Engineering'
+courses = [
+	'PPG201H1',
+	'PPG302H1',
+	'PPG402H1',
+]
+
+[AECERRRE]
+name = 'Certificate in Renewable Resources Engineering'
+courses = [
+	'CHE475H1',
+	'FOR308H1',
+	'FOR421H1',
+	'FOR424H1',
+	'FOR425H1',
 ]

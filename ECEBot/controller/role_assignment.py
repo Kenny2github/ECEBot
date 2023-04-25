@@ -4,7 +4,7 @@ from logging import getLogger
 import json
 import tomllib
 from collections import defaultdict
-from typing import Optional, Literal, cast
+from typing import Optional, Union, Literal, TypedDict, cast
 
 # 3rd-party
 import discord
@@ -15,7 +15,7 @@ from ..utils import error_embed
 
 logger = getLogger(__name__)
 
-Level = Literal[200, 300, 400, 500]
+Level = Literal[100, 200, 300, 400, 500]
 
 MESSAGE_FILENAME = 'messages.json'
 COURSES_FILENAME = 'courses.toml'
@@ -25,25 +25,38 @@ REMOVED_MESSAGE = 'Removed %r (%s) role from %s (%s)'
 HAD_MESSAGE = '%r (%s) role already given to %s (%s)'
 NOT_HAD_MESSAGE = '%r (%s) role not present on %s (%s)'
 
+class CourseCategory(TypedDict):
+    name: str
+    courses: list[str]
+
 # load course info
 
 AREAS: dict[int, str] = {}
-COURSES: dict[int, defaultdict[Level, list[str]]] = {}
+MINORS_CERTS: dict[str, str] = {}
+COURSES: dict[Union[int, str], defaultdict[Level, list[str]]] = {}
 
 def load_course_info():
     with open(COURSES_FILENAME, 'rb') as f:
-        courses = tomllib.load(f)
+        courses: dict[str, CourseCategory] = tomllib.load(f)
 
     for key, value in courses.items():
-        area = int(key[len('area-'):])
-        AREAS[area] = value['name']
-        COURSES[area] = defaultdict(list)
+        if key.startswith('area-'):
+            category = int(key[len('area-'):])
+            AREAS[category] = value['name']
+        else:
+            category = key
+            MINORS_CERTS[category] = value['name']
+        COURSES[category] = defaultdict(list)
         for course in value['courses']:
-            code = re.search(r'[2345]\d\d', course)
+            code = re.search(r'[A-Z]{3}([12345ABCD])\d\d', course)
             if code is None:
                 raise ValueError(f'Invalid course code {course!r}')
-            level = cast(Level, int(code.group(0)[0]) * 100)
-            COURSES[area][level].append(course)
+            code = code.group(1)
+            if code.isnumeric():
+                level = cast(Level, int(code) * 100)
+            else: # UTSC-style ABCD level
+                level = cast(Level, (ord(code) - ord('A') + 1) * 100)
+            COURSES[category][level].append(course)
 
 load_course_info()
 
@@ -77,7 +90,7 @@ class LevelView(discord.ui.View):
     def __init__(self, *, area: int, timeout: Optional[float] = 180):
         super().__init__(timeout=timeout)
         self.area = area
-        for level in 200, 300, 400, 500:
+        for level in 100, 200, 300, 400, 500:
             courses = COURSES[self.area][level]
             if courses:
                 self.add_item(CourseSelect(
