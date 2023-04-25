@@ -57,6 +57,8 @@ def load_course_info():
             else: # UTSC-style ABCD level
                 level = cast(Level, (ord(code) - ord('A') + 1) * 100)
             COURSES[category][level].append(course)
+        for course_list in COURSES[category].values():
+            course_list.sort()
 
 load_course_info()
 
