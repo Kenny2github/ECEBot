@@ -64,7 +64,7 @@ load_course_info()
 
 # end course info
 
-class AreaView(discord.ui.View):
+class CategoryView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
 
@@ -74,26 +74,37 @@ class AreaView(discord.ui.View):
     ], placeholder='Choose an area')
     async def area(self, ctx: discord.Interaction,
                    select: discord.ui.Select) -> None:
+        await self._category(ctx, int(select.values[0]),
+                             f'Area {select.values[0]}')
+
+    @discord.ui.select(options=[
+        discord.SelectOption(label=name, value=key)
+        for key, name in MINORS_CERTS.items()
+    ], placeholder='Choose a minor/certificate')
+    async def minor_cert(self, ctx: discord.Interaction,
+                         select: discord.ui.Select) -> None:
+        await self._category(ctx, select.values[0],
+                             MINORS_CERTS[select.values[0]])
+
+    async def _category(self, ctx: discord.Interaction,
+                        key: Union[int, str], value: str) -> None:
         assert ctx.guild is not None
         assert ctx.message is not None
         assert isinstance(ctx.user, discord.Member)
-        view = LevelView(area=int(select.values[0]))
+        view = LevelView(category=key)
         await ctx.response.edit_message(view=self)
         await ctx.followup.send(
-            content=f'Choose Area {select.values[0]} courses from the below dropdowns.',
+            content=f'Choose {value} courses from the below dropdowns.',
             view=view,
             ephemeral=True,
         )
 
 class LevelView(discord.ui.View):
 
-    area: int
-
-    def __init__(self, *, area: int, timeout: Optional[float] = 180):
+    def __init__(self, *, category: Union[int, str], timeout: Optional[float] = 180):
         super().__init__(timeout=timeout)
-        self.area = area
         for level in 100, 200, 300, 400, 500:
-            courses = COURSES[self.area][level]
+            courses = COURSES[category][level]
             if courses:
                 self.add_item(CourseSelect(
                     level=level, courses=courses))
@@ -154,7 +165,7 @@ async def load_guilds(bot: commands.Bot) -> None:
             logger.info('Taking ownership of #%s (%s) %s',
                         channel.name, channel.id, message.id)
             try:
-                await message.edit(view=AreaView())
+                await message.edit(view=CategoryView())
             except discord.NotFound:
                 logger.error('Message ID %s not found, unsetting', message.id)
                 del data[str(channel_id)] # clear this message

@@ -7,7 +7,7 @@ from discord.ext import commands
 from discord import app_commands
 
 # 1st-party
-from ..controller.role_assignment import AreaView, MESSAGE_FILENAME
+from ..controller.role_assignment import CategoryView, MESSAGE_FILENAME
 
 class MessageModal(discord.ui.Modal):
 
@@ -25,7 +25,7 @@ class MessageModal(discord.ui.Modal):
         self.add_item(self.body)
 
     async def on_submit(self, ctx: discord.Interaction, /) -> None:
-        message = await self.channel.send(self.body.value, view=AreaView())
+        message = await self.channel.send(self.body.value, view=CategoryView())
         try:
             with open(MESSAGE_FILENAME, 'r', encoding='utf8') as f:
                 data: dict[str, int] = json.load(f)
