@@ -41,6 +41,32 @@ def indexes_of(search: str, value: str) -> list[int]:
         indexes.append(new_index)
     return indexes
 
+async def course_complete(
+    ctx: discord.Interaction, value: str
+) -> list[app_commands.Choice[str]]:
+    """Autocomplete options for course parameter"""
+    assert ctx.guild is not None
+    assert isinstance(ctx.user, discord.Member)
+    value = value.upper() # for convenience
+
+    choices: list[str] = []
+    courses = [course for levels in COURSES.values()
+                for courses in levels.values() for course in courses]
+    for course in courses:
+        if course in choices:
+            continue
+        if value == '' or indexes_of(value, course): # empty list is no match
+            choices.append(course)
+        if len(choices) == 25:
+            # Hit limit of number of choices
+            break
+    # sort by closeness of match, then lexicographically
+    choices.sort(key=lambda choice: (indexes_of(value, choice), choice))
+    logger.debug('Suggesting %s choice(s) to %s from input %r',
+                    len(choices), ctx.user, value)
+    return [app_commands.Choice(name=choice, value=choice)
+            for choice in choices]
+
 class SelfRole(commands.Cog):
 
     @app_commands.guild_only()
@@ -73,28 +99,7 @@ class SelfRole(commands.Cog):
     async def course_role_autocomplete(
         self, ctx: discord.Interaction, value: str
     ) -> list[app_commands.Choice[str]]:
-        """Autocomplete options for course parameter"""
-        assert ctx.guild is not None
-        assert isinstance(ctx.user, discord.Member)
-        value = value.upper() # for convenience
-
-        choices: list[str] = []
-        courses = [course for levels in COURSES.values()
-                   for courses in levels.values() for course in courses]
-        for course in courses:
-            if course in choices:
-                continue
-            if value == '' or indexes_of(value, course): # empty list is no match
-                choices.append(course)
-            if len(choices) == 25:
-                # Hit limit of number of choices
-                break
-        # sort by closeness of match, then lexicographically
-        choices.sort(key=lambda choice: (indexes_of(value, choice), choice))
-        logger.debug('Suggesting %s choice(s) to %s from input %r',
-                     len(choices), ctx.user, value)
-        return [app_commands.Choice(name=choice, value=choice)
-                for choice in choices]
+        return await course_complete(ctx, value)
 
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(SelfRole())
