@@ -83,6 +83,8 @@ class Setup(app_commands.Group):
                 manage_roles=True, manage_channels=True)
             created_channels: set[str] = set()
             for area, levels in COURSES.items():
+                if not isinstance(area, int):
+                    continue # don't create minor/cert channels by default
                 courses = [course for level in levels.values()
                            for course in level]
                 # concatenating levels puts things out of order
@@ -144,7 +146,7 @@ class Setup(app_commands.Group):
                     logger.debug('%r role already exists', name)
 
             courses = {course for area in COURSES.values()
-                    for level in area.values() for course in level}
+                       for level in area.values() for course in level}
             for course in courses:
                 role = discord.utils.get(ctx.guild.roles, name=course)
                 if role is None:
