@@ -1,6 +1,7 @@
 # stdlib
 import re
 from logging import getLogger
+from typing import Union, Optional
 
 # 3rd-party
 import discord
@@ -17,6 +18,7 @@ logger = getLogger(__name__)
 COURSE_CHANNEL_SUFFIXES = ['', '-hw-help']
 
 def tail(logs: list[str], format: str) -> str:
+    """Cut down logs to the most recent ones that fit in one message."""
     filtered_logs = [line for line in logs
                      if 'found' not in line.casefold()
                      and 'already' not in line.casefold()]
@@ -29,6 +31,75 @@ def tail(logs: list[str], format: str) -> str:
             return msg
         msg = new_msg
     return msg
+
+# For the following functions, "amc" is an abbreviation for "area/minor/certificate".
+
+def amc_name(amc: Union[int, str]) -> str:
+    """Get a string name for an area/minor/certificate."""
+    if isinstance(amc, int):
+        amc = f'Area {amc}'
+    return amc
+
+def amc_role(guild: discord.Guild,
+             amc: Union[int, str]) -> Optional[discord.Role]:
+    """Get a role for an area/minor/certificate, or None if not found."""
+    return discord.utils.get(guild.roles, name=amc_name(amc))
+
+def amc_category(guild: discord.Guild,
+                 amc: Union[int, str]) -> Optional[discord.CategoryChannel]:
+    """Get a category for an area/minor/certificate, or None if not found."""
+    return discord.utils.get(guild.categories, name=amc_name(amc))
+
+def course_role(guild: discord.Guild, course: str) -> Optional[discord.Role]:
+    """Get a role for a course, or None if not found."""
+    return discord.utils.get(guild.roles, name=course)
+
+async def add_course(guild: discord.Guild, amc: Union[int, str],
+                     course: str) -> tuple[discord.Role, list[discord.TextChannel]]:
+    """Create a role+category+channel set for a course."""
+    amc = amc_name(amc)
+    _amc_role = amc_role(guild, amc)
+    assert _amc_role is not None
+    # define perms for various contexts
+    default_perms = discord.PermissionOverwrite(read_messages=False)
+    role_perms = discord.PermissionOverwrite(read_messages=True)
+    my_perms = discord.PermissionOverwrite(
+        read_messages=True, manage_permissions=True,
+        manage_roles=True, manage_channels=True,
+    )
+    # get role for course
+    role = course_role(guild, course)
+    if role is None:
+        role = await guild.create_role(
+            name=course, permissions=discord.Permissions.none(),
+            hoist=False, mentionable=False
+        )
+    # get a/m/c category
+    category = amc_category(guild, amc)
+    if category is None:
+        logger.debug('Creating %r category', amc)
+        category = await guild.create_category(amc, overwrites={
+            guild.default_role: default_perms,
+            _amc_role: role_perms,
+            guild.me: my_perms,
+        })
+    # create channels
+    channels: list[discord.TextChannel] = []
+    for suffix in COURSE_CHANNEL_SUFFIXES:
+        name = course.lower() + suffix
+        channel = discord.utils.get(category.channels, name=name)
+        if channel is not None:
+            logger.debug('Found #%s', name)
+            continue
+        logger.debug('Creating #%s', name)
+        channel = await category.create_text_channel(name, overwrites={
+            guild.default_role: default_perms,
+            # for potential area reps
+            _amc_role: role_perms,
+            role: role_perms,
+            guild.me: my_perms,
+        })
+    return role, channels
 
 class Setup(app_commands.Group):
 
@@ -76,11 +147,6 @@ class Setup(app_commands.Group):
         await ctx.response.defer(ephemeral=True)
 
         with capture_logs(logger) as logs:
-            default_perms = discord.PermissionOverwrite(read_messages=False)
-            role_perms = discord.PermissionOverwrite(read_messages=True)
-            my_perms = discord.PermissionOverwrite(
-                read_messages=True, manage_permissions=True,
-                manage_roles=True, manage_channels=True)
             created_channels: set[str] = set()
             for area, levels in COURSES.items():
                 if not isinstance(area, int):
@@ -89,37 +155,9 @@ class Setup(app_commands.Group):
                            for course in level]
                 # concatenating levels puts things out of order
                 courses.sort()
-                name = f'Area {area}'
-                cat = discord.utils.get(ctx.guild.categories, name=name)
-                if cat is None:
-                    logger.debug('Creating %r category', name)
-                    cat = await ctx.guild.create_category(name, overwrites={
-                        ctx.guild.default_role: default_perms,
-                        area_roles[area]: role_perms,
-                        ctx.guild.me: my_perms,
-                    })
-                else:
-                    logger.debug('Found %r category', name)
                 for course in courses:
-                    for suffix in COURSE_CHANNEL_SUFFIXES:
-                        name = course.lower() + suffix
-                        if name in created_channels:
-                            logger.debug('Already created/found #%s', name)
-                            continue
-                        channel = discord.utils.get(cat.channels, name=name)
-                        if channel is not None:
-                            logger.debug('Found #%s', name)
-                            created_channels.add(name)
-                            continue
-                        logger.debug('Creating #%s', name)
-                        await cat.create_text_channel(name, overwrites={
-                            ctx.guild.default_role: default_perms,
-                            # for potential area reps
-                            area_roles[area]: role_perms,
-                            course_roles[course]: role_perms,
-                            ctx.guild.me: my_perms,
-                        })
-                        created_channels.add(name)
+                    _, created = await add_course(ctx.guild, area, course)
+                    created_channels.update({ch.name for ch in created})
         await ctx.edit_original_response(
             content=tail(logs, '```\n{}\n```\nDone.'))
 
