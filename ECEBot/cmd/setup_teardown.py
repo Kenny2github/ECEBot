@@ -1,7 +1,7 @@
 # stdlib
 import re
 from logging import getLogger
-from typing import Union, Optional
+from typing import Optional
 
 # 3rd-party
 import discord
@@ -11,7 +11,7 @@ from discord import app_commands
 # 1st-party
 from ..controller.role_assignment import COURSES
 from ..logs import capture_logs
-from ..utils import error_embed
+from ..utils import error_embed, Category
 
 logger = getLogger(__name__)
 
@@ -34,19 +34,27 @@ def tail(logs: list[str], format: str) -> str:
 
 # For the following functions, "amc" is an abbreviation for "area/minor/certificate".
 
-def amc_name(amc: Union[int, str]) -> str:
+def amc_name(amc: Category) -> str:
     """Get a string name for an area/minor/certificate."""
     if isinstance(amc, int):
         amc = f'Area {amc}'
     return amc
 
+def course_amc(course: str) -> Category:
+    """Get an area/minor/certificate that a course belongs to."""
+    for area, levels in COURSES.items():
+        for level in levels.values():
+            if course in level:
+                return area
+    raise ValueError(course)
+
 def amc_role(guild: discord.Guild,
-             amc: Union[int, str]) -> Optional[discord.Role]:
+             amc: Category) -> Optional[discord.Role]:
     """Get a role for an area/minor/certificate, or None if not found."""
     return discord.utils.get(guild.roles, name=amc_name(amc))
 
 def amc_category(guild: discord.Guild,
-                 amc: Union[int, str]) -> Optional[discord.CategoryChannel]:
+                 amc: Category) -> Optional[discord.CategoryChannel]:
     """Get a category for an area/minor/certificate, or None if not found."""
     return discord.utils.get(guild.categories, name=amc_name(amc))
 
@@ -54,7 +62,7 @@ def course_role(guild: discord.Guild, course: str) -> Optional[discord.Role]:
     """Get a role for a course, or None if not found."""
     return discord.utils.get(guild.roles, name=course)
 
-async def add_course(guild: discord.Guild, amc: Union[int, str],
+async def add_course(guild: discord.Guild, amc: Category,
                      course: str) -> tuple[discord.Role, list[discord.TextChannel]]:
     """Create a role+category+channel set for a course."""
     amc = amc_name(amc)

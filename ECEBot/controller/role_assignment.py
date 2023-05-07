@@ -4,14 +4,14 @@ from logging import getLogger
 import json
 import tomllib
 from collections import defaultdict
-from typing import Optional, Union, Literal, TypedDict, cast
+from typing import Optional, Literal, TypedDict, cast
 
 # 3rd-party
 import discord
 from discord.ext import commands
 
 # 1st-party
-from ..utils import error_embed
+from ..utils import error_embed, Category
 
 logger = getLogger(__name__)
 
@@ -33,7 +33,7 @@ class CourseCategory(TypedDict):
 
 AREAS: dict[int, str] = {}
 MINORS_CERTS: dict[str, str] = {}
-COURSES: dict[Union[int, str], defaultdict[Level, list[str]]] = {}
+COURSES: dict[Category, defaultdict[Level, list[str]]] = {}
 
 def load_course_info():
     with open(COURSES_FILENAME, 'rb') as f:
@@ -87,7 +87,7 @@ class CategoryView(discord.ui.View):
                              MINORS_CERTS[select.values[0]])
 
     async def _category(self, ctx: discord.Interaction,
-                        key: Union[int, str], value: str) -> None:
+                        key: Category, value: str) -> None:
         assert ctx.guild is not None
         assert ctx.message is not None
         assert isinstance(ctx.user, discord.Member)
@@ -101,7 +101,7 @@ class CategoryView(discord.ui.View):
 
 class LevelView(discord.ui.View):
 
-    def __init__(self, *, category: Union[int, str], timeout: Optional[float] = 180):
+    def __init__(self, *, category: Category, timeout: Optional[float] = 180):
         super().__init__(timeout=timeout)
         for level in 100, 200, 300, 400, 500:
             courses = COURSES[category][level]

@@ -1,3 +1,7 @@
+# stdlib
+from typing import Union
+
+# 3rd-party
 import discord
 
 def error_embed(msg: str) -> discord.Embed:
@@ -6,3 +10,5 @@ def error_embed(msg: str) -> discord.Embed:
         description=msg,
         color=discord.Color.red(),
     )
+
+Category = Union[int, str]
