@@ -183,8 +183,9 @@ class Setup(app_commands.Group):
                 else:
                     logger.debug('%r role already exists', name)
 
-            courses = {course for area in COURSES.values()
-                       for level in area.values() for course in level}
+            courses = {course for area, levels in COURSES.items()
+                       if isinstance(area, int)
+                       for level in levels.values() for course in level}
             for course in courses:
                 role = discord.utils.get(ctx.guild.roles, name=course)
                 if role is None:
