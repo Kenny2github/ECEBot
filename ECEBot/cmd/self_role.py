@@ -71,6 +71,7 @@ class SelfRole(commands.Cog):
 
     @app_commands.guild_only()
     @app_commands.command()
+    @app_commands.describe(course='The course to enroll in.')
     async def course_role(self, ctx: discord.Interaction, course: str) -> None:
         """Give yourself a course role!"""
         assert ctx.guild is not None

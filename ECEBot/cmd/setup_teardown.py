@@ -128,6 +128,11 @@ class Setup(app_commands.Group):
             content=tail(logs, '```\n{}\n```\nDone.'))
 
     @app_commands.command()
+    @app_commands.describe(
+        course='The course to set up.',
+        on_demand='If True, create channels only '
+        'if configured to do so on demand.',
+    )
     async def course(self, ctx: discord.Interaction,
                      course: str, on_demand: bool = False) -> None:
         """Set up the role and channels for one course."""
@@ -165,6 +170,7 @@ class Teardown(app_commands.Group):
         )
 
     @app_commands.command()
+    @app_commands.describe(cat='The category to tear down.')
     async def category(self, ctx: discord.Interaction,
                        cat: discord.CategoryChannel) -> None:
         """Tear down a category and all its subchannels."""
@@ -178,6 +184,8 @@ class Teardown(app_commands.Group):
             content=f'Deleted {cat.name!r} and its members.')
 
     @app_commands.command()
+    @app_commands.describe(pattern='Python-flavored regex pattern. Roles with '
+                           'names matching this pattern will be deleted.')
     async def roles(self, ctx: discord.Interaction, pattern: str) -> None:
         """Tear down all roles matching a regex."""
         assert ctx.guild is not None

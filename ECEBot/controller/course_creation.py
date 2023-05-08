@@ -95,7 +95,15 @@ def course_role(guild: discord.Guild, course: str) -> Optional[discord.Role]:
 async def add_course(guild: discord.Guild, amc: Category,
                      course: str, on_demand: bool = False
                      ) -> tuple[discord.Role, list[discord.TextChannel]]:
-    """Create a role+category+channel set for a course."""
+    """Create a role+category+channel set for a course.
+
+    Parameters:
+        guild: The guild to create channels and roles in.
+        amc: The area/minor/certificate that the course belongs to.
+        course: The course code to create items for.
+        on_demand: If True, this is being done on demand and the
+            relevant configuration option should be respected.
+    """
     amc_key = amc_name(amc)
     _amc_role = amc_role(guild, amc_key)
     if _amc_role is None:
