@@ -9,10 +9,7 @@ class SetStatus:
         self.task.before_loop(self.before)
 
     async def set_status(self):
-        if self.task.current_loop & 1:
-            message = f'{len(self.bot.users)} people'
-        else:
-            message = '/help'
+        message = '/course_role'
         await self.bot.change_presence(activity=discord.Activity(
             type=discord.ActivityType.watching, name=message))
 
