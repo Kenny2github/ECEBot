@@ -19,3 +19,5 @@ INVITE_URL: Optional[str]
 # otherwise put it a minute or so ahead if you need to sync.
 # The bot will always sync guild commands if DEBUG_GUILD is set.
 COMMAND_FRESHNESS: float
+# If True, only roles will be created on demand, not channels
+CHANNELS_ON_DEMAND: bool

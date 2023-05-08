@@ -9,6 +9,7 @@ from logging import getLogger
 import discord
 
 # 1st-party
+from config import CHANNELS_ON_DEMAND
 from ..utils import Category, Level
 
 logger = getLogger(__name__)
@@ -92,7 +93,8 @@ def course_role(guild: discord.Guild, course: str) -> Optional[discord.Role]:
     return discord.utils.get(guild.roles, name=course)
 
 async def add_course(guild: discord.Guild, amc: Category,
-                     course: str) -> tuple[discord.Role, list[discord.TextChannel]]:
+                     course: str, on_demand: bool = False
+                     ) -> tuple[discord.Role, list[discord.TextChannel]]:
     """Create a role+category+channel set for a course."""
     amc_key = amc_name(amc)
     _amc_role = amc_role(guild, amc_key)
@@ -117,6 +119,8 @@ async def add_course(guild: discord.Guild, amc: Category,
             name=course, permissions=discord.Permissions.none(),
             hoist=False, mentionable=False
         )
+    if on_demand and not CHANNELS_ON_DEMAND:
+        return role, []
     # get a/m/c category
     category = amc_category(guild, amc)
     if category is None:

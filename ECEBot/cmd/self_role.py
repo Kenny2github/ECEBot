@@ -78,7 +78,7 @@ class SelfRole(commands.Cog):
 
         role = discord.utils.get(ctx.guild.roles, name=course)
         if role is None:
-            # maybe create the role and channel for the course
+            # maybe create the role and channel for the course on demand
             courses = {course for levels in COURSES.values()
                        for courses in levels.values() for course in courses}
             if course not in courses:
@@ -88,7 +88,7 @@ class SelfRole(commands.Cog):
                 ), ephemeral=True)
                 return
             await ctx.response.defer(ephemeral=True)
-            role, _ = await add_course(ctx.guild, course_amc(course), course)
+            role, _ = await add_course(ctx.guild, course_amc(course), course, True)
         else:
             await ctx.response.defer(ephemeral=True)
         # toggle the role

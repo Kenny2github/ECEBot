@@ -86,7 +86,7 @@ class Setup(app_commands.Group):
                 # concatenating levels puts things out of order
                 courses.sort()
                 for course in courses:
-                    _, created = await add_course(ctx.guild, area, course)
+                    _, created = await add_course(ctx.guild, area, course, False)
                     created_channels.update({ch.name for ch in created})
         await ctx.edit_original_response(
             content=tail(logs, '```\n{}\n```\nDone.'))
@@ -129,7 +129,7 @@ class Setup(app_commands.Group):
 
     @app_commands.command()
     async def course(self, ctx: discord.Interaction,
-                     course: str) -> None:
+                     course: str, on_demand: bool = False) -> None:
         """Set up the role and channels for one course."""
         assert ctx.guild is not None
         await ctx.response.defer()
@@ -145,7 +145,7 @@ class Setup(app_commands.Group):
             ))
             return
 
-        await add_course(ctx.guild, amc, course)
+        await add_course(ctx.guild, amc, course, on_demand)
         await ctx.edit_original_response(
             content=f'Successfully created {course!r} role/channels')
 
