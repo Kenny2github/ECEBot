@@ -7,9 +7,8 @@ from discord.ext import commands
 from discord import app_commands
 
 # 1st-party
-from ..controller.role_assignment import \
-    COURSES, REMOVED_MESSAGE, GIVEN_MESSAGE
-from .setup_teardown import course_amc, add_course
+from ..controller.role_assignment import REMOVED_MESSAGE, GIVEN_MESSAGE
+from ..controller.course_creation import COURSES, course_amc, add_course
 from ..utils import error_embed
 
 logger = getLogger(__name__)
