@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ECEBot"
+version = "0.0.0"
+description = "A bot to manage course channels & role assignment."
+readme = "README.md"
+requires-python = ">=3.9"
+keywords = ["courses", "discord", "bot"]
+license = {file = "LICENSE"}
+authors = [{name = "Ken Hilton"}]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Communications :: Chat",
+    "Topic :: Education",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+	"Typing :: Typed"
+]
+dynamic = ["dependencies"]
+
+[project.urls]
+Source = "https://github.com/Kenny2github/ECEBot"
+
+[tool.setuptools]
+packages = ["ECEBot"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
