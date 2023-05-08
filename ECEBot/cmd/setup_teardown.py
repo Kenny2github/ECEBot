@@ -10,6 +10,7 @@ from discord import app_commands
 # 1st-party
 from ..controller.role_assignment import COURSES
 from ..controller.course_creation import add_course, course_amc
+from ..cmd.self_role import course_complete
 from ..logs import capture_logs
 from ..utils import error_embed
 
@@ -125,6 +126,33 @@ class Setup(app_commands.Group):
 
         await ctx.edit_original_response(
             content=tail(logs, '```\n{}\n```\nDone.'))
+
+    @app_commands.command()
+    async def course(self, ctx: discord.Interaction,
+                     course: str) -> None:
+        """Set up the role and channels for one course."""
+        assert ctx.guild is not None
+        await ctx.response.defer()
+
+        amc = course_amc(course)
+
+        # ensure the course exists
+        courses = {course for area, levels in COURSES.items() if area == amc
+                   for courses in levels.values() for course in courses}
+        if course not in courses:
+            await ctx.edit_original_response(embed=error_embed(
+                f'No such course: {course!r}'
+            ))
+            return
+
+        await add_course(ctx.guild, amc, course)
+        await ctx.edit_original_response(
+            content=f'Successfully created {course!r} role/channels')
+
+    @course.autocomplete('course')
+    async def course_autocomplete(self, ctx: discord.Interaction,
+                                  value: str) -> list[app_commands.Choice]:
+        return await course_complete(ctx, value)
 
 class Teardown(app_commands.Group):
 
