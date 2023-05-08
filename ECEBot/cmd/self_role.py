@@ -9,6 +9,7 @@ from discord import app_commands
 # 1st-party
 from ..controller.role_assignment import \
     COURSES, REMOVED_MESSAGE, GIVEN_MESSAGE
+from .setup_teardown import course_amc, add_course
 from ..utils import error_embed
 
 logger = getLogger(__name__)
@@ -51,7 +52,7 @@ async def course_complete(
 
     choices: list[str] = []
     courses = [course for levels in COURSES.values()
-                for courses in levels.values() for course in courses]
+               for courses in levels.values() for course in courses]
     for course in courses:
         if course in choices:
             continue
@@ -78,12 +79,20 @@ class SelfRole(commands.Cog):
 
         role = discord.utils.get(ctx.guild.roles, name=course)
         if role is None:
-            await ctx.response.send_message(embed=error_embed(
-                f'Could not find {course!r} role to toggle, '
-                'please contact the admins if this is a real course.'
-            ), ephemeral=True)
-            return
-        await ctx.response.defer(ephemeral=True)
+            # maybe create the role and channel for the course
+            courses = {course for levels in COURSES.values()
+                       for courses in levels.values() for course in courses}
+            if course not in courses:
+                # don't create roles/channels for nonexistent courses
+                await ctx.response.send_message(embed=error_embed(
+                    f'No such course: {course!r}'
+                ), ephemeral=True)
+                return
+            await ctx.response.defer(ephemeral=True)
+            role, _ = await add_course(ctx.guild, course_amc(course), course)
+        else:
+            await ctx.response.defer(ephemeral=True)
+        # toggle the role
         if role in ctx.user.roles:
             await ctx.user.remove_roles(role, reason='Requested by user')
             logger.info(REMOVED_MESSAGE, course, role.id, ctx.user, ctx.user.id)

@@ -11,6 +11,7 @@ import discord
 from discord.ext import commands
 
 # 1st-party
+from ..cmd.setup_teardown import add_course
 from ..utils import error_embed, Category
 
 logger = getLogger(__name__)
@@ -107,16 +108,20 @@ class LevelView(discord.ui.View):
             courses = COURSES[category][level]
             if courses:
                 self.add_item(CourseSelect(
-                    level=level, courses=courses))
+                    category=category, level=level, courses=courses))
 
 class CourseSelect(discord.ui.Select[LevelView]):
 
-    def __init__(self, *, level: Level, courses: list[str]) -> None:
+    category: Category
+
+    def __init__(self, *, category: Category,
+                 level: Level, courses: list[str]) -> None:
         super().__init__(
             placeholder=f'{level}-level courses',
             options=[discord.SelectOption(label=course)
                      for course in courses]
         )
+        self.category = category
 
     async def callback(self, ctx: discord.Interaction) -> None:
         assert ctx.guild is not None
@@ -126,10 +131,8 @@ class CourseSelect(discord.ui.Select[LevelView]):
         role = discord.utils.get(ctx.guild.roles, name=name)
         await ctx.response.edit_message(view=self.view)
         if role is None:
-            await ctx.followup.send(embed=error_embed(
-                f'Could not find {name!r} role to toggle, '
-                'please contact the admins.'))
-            return
+            # create missing role and channel on demand
+            role, _ = await add_course(ctx.guild, self.category, name)
         if role in ctx.user.roles:
             await ctx.user.remove_roles(role, reason='Requested by user')
             logger.info(REMOVED_MESSAGE, name, role.id, ctx.user, ctx.user.id)
