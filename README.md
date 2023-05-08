@@ -2,12 +2,13 @@
 A bot to manage course channels & role assignment.
 
 ## Setup
-1. `python -m venv .venv`
-2. Activate the virtual environment
-3. `pip install -U pip setuptools wheel`
-4. `pip install -r requirements.txt`
-5. Put configuration in `config.py`, using `config.pyi` as a reference.
+1. Make sure you are `cd`ed into the project directory.
+2. `python -m venv .venv`
+3. Activate the virtual environment
+4. `pip install -U pip setuptools wheel`
+5. `pip install -r requirements.txt`
+6. `pip install -e .`
+7. Put configuration in `config.py`, using `config.pyi` as a reference.
 
 ## Running
-1. Make sure you're `cd`ed into the directory containing the `ECEBot` directory.
-2. `python -m ECEBot`
+1. `.venv/bin/python ECEBot` (directly run the package without `-m`)
