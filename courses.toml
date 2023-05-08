@@ -130,6 +130,24 @@ courses = [
 	'PHY365H1',
 ]
 
+[area-8]
+name = 'Area 8: Popular Electives'
+courses = [
+	'APS360H1',
+	'APS500H1',
+	'HPS100H1',
+	'HPS283H1',
+	'HPS345H1',
+	'JRE300H1',
+	'JRE410H1',
+	'JRE420H1',
+	'TEP234H1',
+	'TEP343H1',
+	'TEP442H1',
+	'TEP444H1',
+	'TEP445H1',
+]
+
 ### ENGINEERING MINORS ###
 
 [AEMINENV]

@@ -48,7 +48,7 @@ class Setup(app_commands.Group):
         missing: set[str] = set()
 
         area_roles: dict[int, discord.Role] = {}
-        for area in range(1, 8):
+        for area in range(1, 9):
             name = f'Area {area}'
             role = discord.utils.get(ctx.guild.roles, name=name)
             if role is None:
@@ -104,7 +104,7 @@ class Setup(app_commands.Group):
                 hoist=False, mentionable=False)
 
         with capture_logs(logger) as logs:
-            for area in range(1, 8):
+            for area in range(1, 9):
                 name = f'Area {area}'
                 role = discord.utils.get(ctx.guild.roles, name=name)
                 if role is None:
