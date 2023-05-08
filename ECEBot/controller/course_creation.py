@@ -61,6 +61,14 @@ def amc_name(amc: Category) -> str:
         amc = f'Area {amc}'
     return amc
 
+def amc_full_name(amc: Category) -> str:
+    """Get the full display name for an area/minor/certificate."""
+    if isinstance(amc, int):
+        name = AREAS[amc]
+    else:
+        name = MINORS_CERTS[amc]
+    return name
+
 def course_amc(course: str) -> Category:
     """Get an area/minor/certificate that a course belongs to."""
     for area, levels in COURSES.items():
@@ -77,7 +85,7 @@ def amc_role(guild: discord.Guild,
 def amc_category(guild: discord.Guild,
                  amc: Category) -> Optional[discord.CategoryChannel]:
     """Get a category for an area/minor/certificate, or None if not found."""
-    return discord.utils.get(guild.categories, name=amc_name(amc))
+    return discord.utils.get(guild.categories, name=amc_full_name(amc))
 
 def course_role(guild: discord.Guild, course: str) -> Optional[discord.Role]:
     """Get a role for a course, or None if not found."""
@@ -86,9 +94,14 @@ def course_role(guild: discord.Guild, course: str) -> Optional[discord.Role]:
 async def add_course(guild: discord.Guild, amc: Category,
                      course: str) -> tuple[discord.Role, list[discord.TextChannel]]:
     """Create a role+category+channel set for a course."""
-    amc = amc_name(amc)
-    _amc_role = amc_role(guild, amc)
-    assert _amc_role is not None
+    amc_key = amc_name(amc)
+    _amc_role = amc_role(guild, amc_key)
+    if _amc_role is None:
+        logger.debug('Creating %r role', amc_key)
+        _amc_role = await guild.create_role(
+            name=amc_key, permissions=discord.Permissions.none(),
+            hoist=False, mentionable=False
+        )
     # define perms for various contexts
     default_perms = discord.PermissionOverwrite(read_messages=False)
     role_perms = discord.PermissionOverwrite(read_messages=True)
@@ -107,8 +120,9 @@ async def add_course(guild: discord.Guild, amc: Category,
     # get a/m/c category
     category = amc_category(guild, amc)
     if category is None:
-        logger.debug('Creating %r category', amc)
-        category = await guild.create_category(amc, overwrites={
+        _amc_name = amc_full_name(amc)
+        logger.debug('Creating %r category', _amc_name)
+        category = await guild.create_category(_amc_name, overwrites={
             guild.default_role: default_perms,
             _amc_role: role_perms,
             guild.me: my_perms,
