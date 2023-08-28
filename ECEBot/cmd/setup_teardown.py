@@ -57,8 +57,9 @@ class Setup(app_commands.Group):
                 area_roles[area] = role
 
         course_roles: dict[str, discord.Role] = {}
-        courses = {course for area in COURSES.values()
-                   for level in area.values() for course in level}
+        courses = {course for area, levels in COURSES.items()
+                   if isinstance(area, int)
+                   for level in levels.values() for course in level}
         for course in courses:
             if course in course_roles:
                 continue
