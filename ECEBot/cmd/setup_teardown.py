@@ -78,7 +78,7 @@ class Setup(app_commands.Group):
         await ctx.response.defer(ephemeral=True)
 
         with capture_logs(logger) as logs:
-            created_channels: set[str] = set()
+            created_courses: set[str] = set()
             for area, levels in COURSES.items():
                 if not isinstance(area, int):
                     continue # don't create minor/cert channels by default
@@ -87,8 +87,10 @@ class Setup(app_commands.Group):
                 # concatenating levels puts things out of order
                 courses.sort()
                 for course in courses:
-                    _, created = await add_course(ctx.guild, area, course, False)
-                    created_channels.update({ch.name for ch in created})
+                    if course in created_courses:
+                        continue # skip already created courses
+                    await add_course(ctx.guild, area, course, False)
+                    created_courses.add(course)
         await ctx.edit_original_response(
             content=tail(logs, '```\n{}\n```\nDone.'))
 
