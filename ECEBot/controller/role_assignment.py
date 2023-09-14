@@ -86,12 +86,19 @@ class CourseSelect(discord.ui.Select[LevelView]):
         assert ctx.guild is not None
         assert isinstance(ctx.user, discord.Member)
         name = self.values[0]
+        for cat, levels in COURSES.items():
+            level_courses = set(sum(levels.values(), start=[]))
+            if name in level_courses:
+                category = cat
+                break
+        else:
+            category = self.category
         _, (role, _) = await asyncio.gather(
             # clear dropdown
             ctx.response.edit_message(view=self.view),
             # create role and/or channels as needed
             # return the role and channels found or created
-            add_course(ctx.guild, self.category, name, True)
+            add_course(ctx.guild, category, name, True)
         )
         if role in ctx.user.roles:
             await ctx.user.remove_roles(role, reason='Requested by user')
