@@ -144,8 +144,9 @@ async def add_course(guild: discord.Guild, amc: Category,
     for suffix in COURSE_CHANNEL_SUFFIXES:
         name = course.lower() + suffix
         channel = discord.utils.get(category.channels, name=name)
-        if channel is not None:
+        if isinstance(channel, discord.TextChannel):
             logger.debug('Found #%s', name)
+            channels.append(channel)
             continue
         logger.debug('Creating #%s', name)
         channel = await category.create_text_channel(name, overwrites={
@@ -155,4 +156,5 @@ async def add_course(guild: discord.Guild, amc: Category,
             role: role_perms,
             guild.me: my_perms,
         })
+        channels.append(channel)
     return role, channels

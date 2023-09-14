@@ -2,6 +2,7 @@
 from logging import getLogger
 import json
 from typing import Optional, cast
+import asyncio
 
 # 3rd-party
 import discord
@@ -83,14 +84,15 @@ class CourseSelect(discord.ui.Select[LevelView]):
 
     async def callback(self, ctx: discord.Interaction) -> None:
         assert ctx.guild is not None
-        assert ctx.message is not None
         assert isinstance(ctx.user, discord.Member)
         name = self.values[0]
-        role = discord.utils.get(ctx.guild.roles, name=name)
-        await ctx.response.edit_message(view=self.view)
-        if role is None:
-            # create missing role and channel on demand
-            role, _ = await add_course(ctx.guild, self.category, name, True)
+        _, (role, _) = await asyncio.gather(
+            # clear dropdown
+            ctx.response.edit_message(view=self.view),
+            # create role and/or channels as needed
+            # return the role and channels found or created
+            add_course(ctx.guild, self.category, name, True)
+        )
         if role in ctx.user.roles:
             await ctx.user.remove_roles(role, reason='Requested by user')
             logger.info(REMOVED_MESSAGE, name, role.id, ctx.user, ctx.user.id)
