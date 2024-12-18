@@ -7,7 +7,9 @@ courses = [
 	'ECE330H1',
 	'ECE335H1',
 	'ECE427H1',
+	'ECE435H1',
 	'ECE437H1',
+	'ECE442H1',
 	'ECE469H1',
 ]
 
@@ -35,6 +37,7 @@ courses = [
 	'ECE412H1',
 	'ECE424H1',
 	'ECE430H1',
+	'ECE435H1',
 	'ECE437H1',
 	'ECE446H1',
 	'ECE512H1',
@@ -95,6 +98,7 @@ courses = [
 	'CSC326H1',
 	'CSC343H1',
 	'CSC343H5',
+	'CSC384H1',
 	'CSC418H1',
 	'CSC444H1',
 	'CSC467H1',
@@ -107,6 +111,7 @@ courses = [
 	'ECE454H1',
 	'ECE461H1',
 	'ECE467H1',
+	'ECE484H1',
 	'ECE568H1',
 ]
 
