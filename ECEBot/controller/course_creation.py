@@ -143,7 +143,8 @@ async def add_course(guild: discord.Guild, amc: Category,
     channels: list[discord.TextChannel] = []
     for suffix in COURSE_CHANNEL_SUFFIXES:
         name = course.lower() + suffix
-        channel = discord.utils.get(category.channels, name=name)
+        # search in guild channels: no duplicate channels across categories
+        channel = discord.utils.get(guild.channels, name=name)
         if isinstance(channel, discord.TextChannel):
             logger.debug('Found #%s', name)
             channels.append(channel)
